@@ -1,13 +1,51 @@
 import { useState } from 'react'
 import './App.css'
-import SignIn from './components/Signin'
 import userContext from './utils/userContext'
+import Header from './components/Header'
+import SignIn from './components/Signin'
+import CommentPost from './components/CommentPost'
 
 function App() {
   const [user, setUser] = useState({})
+  /***
+   * 
+● Google Authentication: Ensure users can sign in with Google to post comments.
+● Comment Input Box: Validate rich text formatting (bold, italic, underline, hyperlink),
+file attachments (image), and user tagging.
+● Comment Features: Check each comment displays profile picture, name, text,
+reactions with counts, reply option, time, “show more/less” for long comments, and
+attached file thumbnails.
+● Sorting and Pagination: Verify comments can be sorted by latest and popular, and
+pagination displays only 8 comments per page with controls.
+Components:
+  - Comment Dashboard
+    - Header : 
+      - Comments (count of comments)
+      - tabs [latest | popular] (latest : default)
+    - Comment Post :
+      - content [text] [bold, italic, underline, hyperlink,emojis]
+      - attachment [image/user tagging] [thumbnail]
+      - show more / less (for long comments)
+      - emoji button
+      - reply button
+      - time when posted
+    - Reply box:
+      - content [text] [bold, italic, underline, hyperlink,emojis]
+      - user tagging
+      - emoji button
+      - reply button
+   * 
+  */
   return (
+    // Dashboard component
     <userContext.Provider value={{ user, setUser }}>
-      <SignIn />
+      <>
+        <SignIn />
+        <div className='container'>
+          <Header />
+          <CommentPost />
+        </div>
+      </>
     </userContext.Provider>
   )
 }
