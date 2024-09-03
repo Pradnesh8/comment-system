@@ -6,12 +6,12 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDBcLk4H99Oyfo7yifxKxedcgGN-tgNiLk",
+    apiKey: "api-key",
     authDomain: "comment-system-assessment.firebaseapp.com",
     projectId: "comment-system-assessment",
     storageBucket: "comment-system-assessment.appspot.com",
     messagingSenderId: "360940999923",
-    appId: "1:360940999923:web:175703b3ea5009ed279386"
+    appId: "app-id"
 };
 
 // Initialize Firebase
