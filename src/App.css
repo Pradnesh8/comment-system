@@ -90,3 +90,41 @@ button {
 .reply-btn-post {
     font-weight: 600;
 }
+/* CommentBox */
+.comment-box {
+    width: auto;
+    margin: 1rem;
+    padding: 2rem;
+    border: 1px solid lightgrey;
+    border-radius: 2rem;
+}
+.comment-textfield {
+    border: 0;
+    width: 100%;
+    font: 400;
+    font-size: 1rem;
+}
+.comment-textfield:focus-visible {
+    outline: none;
+}
+.action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.text-decoration-bar {
+    display: flex;
+    gap: 1rem;
+    /* column-gap: 0.5rem; */
+    justify-content: start;
+    align-items: center;
+    font-size: 1rem;
+}
+.text-decoration-bar > span {
+    cursor: pointer;
+}
+.send-comment-btn {
+    color: white;
+    background-color: black;
+    border-radius: 0.4rem;
+}
