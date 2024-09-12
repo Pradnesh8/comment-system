@@ -1,16 +1,14 @@
 import React, { useContext } from 'react'
 import Profile from './Profile'
 import userContext from "../utils/userContext";
-const CommentPost = () => {
+import { displayName } from 'react-quill';
+const CommentPost = ({ post }) => {
+    const { content, email, name, reactions, replyFlag, userPicture } = post;
     const { user, setUser } = useContext(userContext);
     return (
         <div className='comment-post'>
-            <Profile user={user} />
-            <div className='comment-content'>
-                Actually, now that I try out the links on my message, above,
-                none of them take me to the secure site. Only my shortcut
-                on my desktop, which I created years ago.
-
+            <Profile user={{ email, displayName: name, photoURL: userPicture }} />
+            <div className='comment-content'>{content}
                 <span className='show-more-btn'><br />show more</span>
             </div>
             {/* Footer - emoji icon | reply | time since post */}

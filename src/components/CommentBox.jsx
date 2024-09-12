@@ -1,12 +1,49 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import TextEditor from './Texteditor'
+import { addComment } from '../utils/firebaseDb.utils';
+import userContext from '../utils/userContext';
 
 const CommentBox = () => {
+    const [content, setContent] = useState("");
+    const { user } = useContext(userContext);
+    const addCommentToDB = async () => {
+        if (content === '') {
+            alert("Please add content in comment")
+            return
+        }
+        // data : 
+        // name: data.name,
+        // email: data.email,
+        // content: data.content,
+        // reactions: [],
+        // replyFlag: data.replyFlag
+        console.log("USER", user)
+        try {
+            const commentInput = {
+                name: user.displayName,
+                email: user.email,
+                content: content,
+                reactions: [],
+                replyFlag: false,
+                photoURL: user.photoURL
+            }
+            const res = await addComment(commentInput);
+            console.log("res from add comment", res);
+            if (!res) {
+                alert("Error adding comment, Please try again!")
+            } else {
+                console.log("Comment added successfully")
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <div className='comment-box'>
-            <TextEditor />
-            {/* <textarea name="comment-textfield" rows={4} className="comment-textfield"></textarea> */}
+            {/* <TextEditor /> */}
+            <textarea name="comment-textfield" rows={4} className="comment-textfield" onChange={(e) => setContent(e.target.value)}></textarea>
             <hr />
             <div className='action-bar'>
                 <div className='text-decoration-bar'>
@@ -15,7 +52,7 @@ const CommentBox = () => {
                     <span>U</span>
                     <span><i className="fa-solid fa-paperclip"></i></span>
                 </div>
-                <button className='send-comment-btn'>Send</button>
+                <button className='send-comment-btn' onClick={addCommentToDB}>Send</button>
             </div>
         </div>
     )
