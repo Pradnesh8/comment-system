@@ -1,11 +1,17 @@
 import React, { useContext, useState } from 'react'
-import TextEditor from './Texteditor'
 import { addComment } from '../utils/firebaseDb.utils';
 import userContext from '../utils/userContext';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const CommentBox = () => {
     const [content, setContent] = useState("");
     const { user } = useContext(userContext);
+    const finalContent = () => {
+        // console.log("final content", finalContent)
+        // setContent(finalContent);
+        addCommentToDB()
+    }
     const addCommentToDB = async () => {
         if (content === '') {
             alert("Please add content in comment")
@@ -42,8 +48,12 @@ const CommentBox = () => {
 
     return (
         <div className='comment-box'>
-            {/* <TextEditor /> */}
-            <textarea name="comment-textfield" rows={4} className="comment-textfield" onChange={(e) => setContent(e.target.value)}></textarea>
+            <ReactQuill theme="snow" value={content} onChange={setContent} />
+            <div className='commentSendBtn-container'>
+                <button className='commentSendBtn' onClick={finalContent}>Send</button>
+            </div>
+            {/* <TextEditor finalContent={finalContent} /> */}
+            {/* <textarea name="comment-textfield" rows={4} className="comment-textfield" onChange={(e) => setContent(e.target.value)}></textarea>
             <hr />
             <div className='action-bar'>
                 <div className='text-decoration-bar'>
@@ -53,7 +63,7 @@ const CommentBox = () => {
                     <span><i className="fa-solid fa-paperclip"></i></span>
                 </div>
                 <button className='send-comment-btn' onClick={addCommentToDB}>Send</button>
-            </div>
+            </div> */}
         </div>
     )
 }
