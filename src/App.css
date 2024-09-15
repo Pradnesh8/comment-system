@@ -53,6 +53,11 @@ button {
     border: 1px solid whitesmoke;
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
+    cursor: pointer;
+}
+.toggler > .active {
+    background: black;
+    color: white;
 }
 
 /* commment post */

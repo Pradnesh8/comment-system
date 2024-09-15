@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import appContext from '../utils/appContext';
 
-const Header = () => {
+const Header = ({ commentsLength }) => {
+    const { commentMode, setCommentMode } = useContext(appContext);
     return (
         <div className='heading'>
-            <h4>Comments (4)</h4>
+            {/* {commentMode} */}
+            <h4>Comments ({commentsLength})</h4>
             <div className='toggler'>
-                <span>Latest</span>
-                <span>Popular</span>
+                <span className={commentMode === 'latest' && 'active'} onClick={() => setCommentMode('latest')}>Latest</span>
+                <span className={commentMode === 'popular' && 'active'} onClick={() => setCommentMode('popular')}>Popular</span>
             </div>
         </div>
     )

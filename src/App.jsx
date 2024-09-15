@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import userContext from './utils/userContext'
+import appContext from './utils/appContext'
 import SignIn from './components/Signin'
 import CommentPostContainer from './components/CommentPostContainer'
 
 
 function App() {
   const [user, setUser] = useState({})
+  const [commentMode, setCommentMode] = useState("latest")
 
 
   useEffect(() => {
@@ -47,7 +49,9 @@ Components:
     <userContext.Provider value={{ user, setUser }}>
       <>
         <SignIn />
-        <CommentPostContainer />
+        <appContext.Provider value={{ commentMode, setCommentMode }}>
+          <CommentPostContainer />
+        </appContext.Provider>
       </>
     </userContext.Provider>
   )
