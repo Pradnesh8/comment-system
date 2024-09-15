@@ -13,6 +13,10 @@ const CommentBox = () => {
         addCommentToDB()
     }
     const addCommentToDB = async () => {
+        if (!(user?.email?.length > 0)) {
+            alert('Please sign in to post a comment')
+            return
+        }
         if (content === '') {
             alert("Please add content in comment")
             return
@@ -23,7 +27,6 @@ const CommentBox = () => {
         // content: data.content,
         // reactions: [],
         // replyFlag: data.replyFlag
-        console.log("USER", user)
         try {
             const commentInput = {
                 name: user.displayName,
