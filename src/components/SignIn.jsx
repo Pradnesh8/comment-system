@@ -14,7 +14,7 @@ const SignIn = () => {
         user?.displayName ? (
             <div className="profile">
                 <Profile user={user} />
-                <button className="logout-btn">
+                <button className="logout-btn" onClick={() => setUser({})}>
                     logout
                 </button>
             </div>
