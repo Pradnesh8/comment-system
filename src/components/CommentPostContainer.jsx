@@ -20,15 +20,8 @@ const CommentPostContainer = () => {
     }, []);
     return (
         <div className='container'>
-            <Header />
+            <Header commentsLength={commentPosts.length} />
             <CommentBox />
-            {/* {
-                new Array(9).fill("").map((post, id) => (
-                    <div key={id}>
-                        <CommentPost />
-                    </div>
-                ))
-            } */}
             {
                 commentPosts.map((post, id) => (
                     <CommentPost post={post} />
