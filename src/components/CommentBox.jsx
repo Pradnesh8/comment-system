@@ -3,6 +3,7 @@ import { addComment } from '../utils/firebaseDb.utils';
 import userContext from '../utils/userContext';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import toast from 'react-hot-toast';
 
 const CommentBox = () => {
     const [content, setContent] = useState("");
@@ -14,11 +15,13 @@ const CommentBox = () => {
     }
     const addCommentToDB = async () => {
         if (!(user?.email?.length > 0)) {
-            alert('Please sign in to post a comment')
+            // alert('Please sign in to post a comment')
+            toast('Please sign in to post a comment')
             return
         }
         if (content === '') {
-            alert("Please add content in comment")
+            // alert("Please add content in comment")
+            toast('Please add content in comment')
             return
         }
         // data : 
@@ -39,9 +42,11 @@ const CommentBox = () => {
             const res = await addComment(commentInput);
             console.log("res from add comment", res);
             if (!res) {
-                alert("Error adding comment, Please try again!")
+                // alert("Error adding comment, Please try again!")
+                toast('Error adding comment, Please try again!')
             } else {
                 console.log("Comment added successfully")
+                toast('Comment added')
             }
         }
         catch (error) {

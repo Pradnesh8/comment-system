@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { signInWithGooglePopup } from "../utils/firebase.utils"
 import userContext from "../utils/userContext";
 import Profile from "./Profile";
+import toast from 'react-hot-toast';
 const SignIn = () => {
     const { user, setUser } = useContext(userContext);
     // console.log("user value", userValue)
@@ -10,13 +11,18 @@ const SignIn = () => {
         console.log(response);
         setUser(response.user)
     }
+    const logout = () => {
+        setUser({})
+        toast('Logged out')
+    }
     return (
         user?.displayName ? (
             <div className="profile">
                 <Profile user={user} />
-                <button className="logout-btn" onClick={() => setUser({})}>
+                <button className="logout-btn" onClick={logout}>
                     logout
                 </button>
+                {/* <Toaster /> */}
             </div>
         ) :
             <div className="sign-in-btn">

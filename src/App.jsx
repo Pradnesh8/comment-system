@@ -5,6 +5,8 @@ import appContext from './utils/appContext'
 import SignIn from './components/Signin'
 import CommentPostContainer from './components/CommentPostContainer'
 
+import { Toaster } from 'react-hot-toast';
+
 
 function App() {
   const [user, setUser] = useState({})
@@ -52,6 +54,7 @@ Components:
         <appContext.Provider value={{ commentMode, setCommentMode }}>
           <CommentPostContainer />
         </appContext.Provider>
+        <Toaster />
       </>
     </userContext.Provider>
   )

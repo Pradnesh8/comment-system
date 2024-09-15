@@ -1,11 +1,6 @@
 import React, { useContext } from 'react'
 import Profile from './Profile'
 import userContext from "../utils/userContext";
-// import { displayName } from 'react-quill';
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-// import { ReactMarkdown } from 'react-markdown/with-html'
-import Markdown from 'react-markdown'
 import parse from 'html-react-parser';
 // const ReactMarkdown = require("react-markdown/with-html"); //for displaying html
 const CommentPost = ({ post }) => {
