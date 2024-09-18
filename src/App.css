@@ -142,3 +142,19 @@ button {
     color: white;
     background-color: black;
 }
+
+/* commentPostContainer */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+}
+.page-item {
+    padding: 0.8rem;
+    border: 1px solid whitesmoke;
+    cursor: pointer;
+}
+.active {
+    text-decoration: underline;
+}

@@ -11,7 +11,7 @@ const CommentPostContainer = () => {
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
-    const itemsPerPage = 8;
+    const itemsPerPage = 5;
 
 
     // Invoke when user click to request another page.
@@ -22,7 +22,7 @@ const CommentPostContainer = () => {
             `User requested page number ${event.selected}, which is offset ${newOffset}`
         );
         setItemOffset(newOffset);
-        setPagination(commentPosts)
+        // setPagination(commentPosts)
     };
     const setPagination = (items) => {
         // Simulate fetching items from another resources.
@@ -40,7 +40,7 @@ const CommentPostContainer = () => {
             const res = await getComments();
             setCommentPosts(res)
             console.log("Fetched comments successfully")
-            console.log("Comments", commentPosts);
+            // console.log("Comments", commentPosts);
             setPagination(res);
         } catch (error) {
             console.log(error)
@@ -49,6 +49,10 @@ const CommentPostContainer = () => {
     useEffect(() => {
         getCommentsFromDb();
     }, []);
+    // to update page after on click of page number
+    useEffect(() => {
+        setPagination(commentPosts);
+    }, [itemOffset])
     return (
         <div className='container'>
             <Header commentsLength={commentPosts.length} />
@@ -56,19 +60,31 @@ const CommentPostContainer = () => {
             <>
                 {/* Paginated posts */}
                 {
-                    currentItems.map((post, id) => (
-                        <CommentPost post={post} />
+                    currentItems?.map((post, id) => (
+                        <CommentPost key={post.name + id} post={post} />
                     ))
                 }
-                <ReactPaginate
-                    breakLabel="..."
-                    nextLabel="next >"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    pageCount={pageCount}
-                    previousLabel="< previous"
-                    renderOnZeroPageCount={null}
-                />
+                {/* {JSON.stringify(commentPosts)} */}
+                {
+                    <ReactPaginate
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null}
+                        marginPagesDisplayed={5}
+                        containerClassName="pagination justify-content-center"
+                        pageClassName="page-item"
+                        pageLinkClassName="page-link"
+                        previousClassName="page-item"
+                        previousLinkClassName="page-link"
+                        nextClassName="page-item"
+                        nextLinkClassName="page-link"
+                        activeClassName="active"
+                    />
+                }
             </>
         </div>
     )
