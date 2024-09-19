@@ -10,6 +10,10 @@ const CommentPost = ({ post }) => {
     const [reactEmoji, setReactEmoji] = useState([]);
     const { user, setUser } = useContext(userContext);
     const [days, hours, minutes, seconds] = getCalculatedDateTime(uploadDateTime, Date.now())
+    // create separate db to store reactions
+    // post id, user id, reaction emoji, id, timestamp
+    // crate index on postid, userid for efficient lookup
+    // also store reaction count in commnents collection like_count, devil_count, clap_count, etc
     const selectEmoji = (event) => {
         // console.log(event.target.innerHTML)
         const selectedEmoji = event.target.innerHTML
