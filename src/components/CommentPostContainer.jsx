@@ -56,8 +56,9 @@ const CommentPostContainer = () => {
     return (
         <div className='container'>
             <Header commentsLength={commentPosts.length} />
-            <CommentBox />
+            <CommentBox onAddComment={getCommentsFromDb} />
             <>
+                {commentPosts.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 1rem' }}>No comments posted</div>}
                 {/* Paginated posts */}
                 {
                     currentItems?.map((post, id) => (
@@ -86,7 +87,7 @@ const CommentPostContainer = () => {
                     />
                 }
             </>
-        </div>
+        </div >
     )
 }
 
