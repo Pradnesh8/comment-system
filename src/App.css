@@ -158,3 +158,33 @@ button {
 .active {
     text-decoration: underline;
 }
+.emoji-btn {
+    position: relative;
+}
+.emoji-btn > img {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.2rem;
+}
+
+.list-of-emojis {
+    display: none;
+    background-color: white;
+    gap: 0.2rem;
+    position: absolute;
+    top: -200%;
+    left: -25%;
+    width: 50vw;
+}
+
+.list-of-emojis > span {
+    font-size: 2rem;
+}
+
+.emoji-btn:hover > .list-of-emojis {
+    display: flex;
+}
+
+.list-of-emojis > span:hover {
+    scale: 1.35;
+}

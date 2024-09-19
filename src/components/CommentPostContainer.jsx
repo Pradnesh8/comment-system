@@ -38,6 +38,7 @@ const CommentPostContainer = () => {
     const getCommentsFromDb = async () => {
         try {
             const res = await getComments();
+            res.sort((a, b) => b.uploadDateTime - a.uploadDateTime)
             setCommentPosts(res)
             console.log("Fetched comments successfully")
             // console.log("Comments", commentPosts);
@@ -56,13 +57,14 @@ const CommentPostContainer = () => {
     return (
         <div className='container'>
             <Header commentsLength={commentPosts.length} />
+            {/* rerender comments on add */}
             <CommentBox onAddComment={getCommentsFromDb} />
             <>
                 {commentPosts.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 1rem' }}>No comments posted</div>}
                 {/* Paginated posts */}
                 {
                     currentItems?.map((post, id) => (
-                        <CommentPost key={post.name + id} post={post} />
+                        <CommentPost key={post.uploadDateTime} post={post} />
                     ))
                 }
                 {/* {JSON.stringify(commentPosts)} */}
