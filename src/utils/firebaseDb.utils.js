@@ -43,7 +43,8 @@ export const addComment = async (data) => {
             content: data.content,
             reactions: [],
             replyFlag: data.replyFlag,
-            userPicture: data.photoURL
+            userPicture: data.photoURL,
+            uploadDateTime: data.uploadDateTime
         });
         console.log("Document written with ID: ", docRef.id);
         return docRef;

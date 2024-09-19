@@ -2,10 +2,12 @@ import React, { useContext } from 'react'
 import Profile from './Profile'
 import userContext from "../utils/userContext";
 import parse from 'html-react-parser';
+import getCalculatedDateTime from '../utils/timeCalculation';
 // const ReactMarkdown = require("react-markdown/with-html"); //for displaying html
 const CommentPost = ({ post }) => {
-    const { content, email, name, reactions, replyFlag, userPicture } = post;
+    const { content, email, name, reactions, replyFlag, userPicture, uploadDateTime } = post;
     const { user, setUser } = useContext(userContext);
+    const [days, hours, minutes, seconds] = getCalculatedDateTime(uploadDateTime, Date.now())
     return (
         <div className='comment-post'>
             <Profile user={{ email, displayName: name, photoURL: userPicture }} />
@@ -27,7 +29,7 @@ const CommentPost = ({ post }) => {
                 </span>
                 |
                 <span className='time-since-post'>
-                    6 hour
+                    {hours > 0 && `${hours} h`} {minutes > 0 && `${minutes} m`}  {seconds} s ago
                 </span>
             </div>
             <div>Replies</div>
