@@ -5,7 +5,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import toast from 'react-hot-toast';
 
-const CommentBox = () => {
+const CommentBox = ({ onAddComment }) => {
     const [content, setContent] = useState("");
     const { user } = useContext(userContext);
     const finalContent = () => {
@@ -37,7 +37,8 @@ const CommentBox = () => {
                 content: content,
                 reactions: [],
                 replyFlag: false,
-                photoURL: user.photoURL
+                photoURL: user.photoURL,
+                uploadDateTime: Date.now()
             }
             const res = await addComment(commentInput);
             console.log("res from add comment", res);
@@ -47,6 +48,8 @@ const CommentBox = () => {
             } else {
                 console.log("Comment added successfully")
                 toast('Comment added')
+                setContent("")
+                onAddComment();
             }
         }
         catch (error) {
