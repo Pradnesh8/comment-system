@@ -41,6 +41,7 @@ export const addComment = async (data) => {
             name: data.name,
             email: data.email,
             content: data.content,
+            attachmentUrl: data?.attachmentUrl,
             reactions: [],
             replyFlag: data.replyFlag,
             userPicture: data.photoURL,

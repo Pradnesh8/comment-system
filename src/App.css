@@ -135,9 +135,10 @@ button {
 }
 .commentSendBtn-container {
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
 }
-.commentSendBtn {
+.commentSendBtn,
+.attachFileBtn {
     margin-top: 0.5rem;
     color: white;
     background-color: black;

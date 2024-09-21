@@ -1,13 +1,17 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Profile from './Profile'
 import userContext from "../utils/userContext";
 import parse from 'html-react-parser';
 import getCalculatedDateTime from '../utils/timeCalculation';
 import image from './../assets/image.png'
+import { storage } from "../utils/firebase.utils";
+import { ref, getMetadata } from 'firebase/storage';
 // const ReactMarkdown = require("react-markdown/with-html"); //for displaying html
 const CommentPost = ({ post }) => {
-    const { content, email, name, reactions, replyFlag, userPicture, uploadDateTime } = post;
+    const { content, email, name, reactions, replyFlag, userPicture, attachmentUrl, uploadDateTime } = post;
     const [reactEmoji, setReactEmoji] = useState([]);
+    const [previewFlag, setPreviewFlag] = useState(false);
+    const [metadata, setMetadata] = useState(null);
     const { user, setUser } = useContext(userContext);
     const [days, hours, minutes, seconds] = getCalculatedDateTime(uploadDateTime, Date.now())
     // create separate db to store reactions
@@ -21,10 +25,24 @@ const CommentPost = ({ post }) => {
         emojiObj[selectedEmoji] = 1
         setReactEmoji([emojiObj, ...reactEmoji])
     }
+    const getAttachmentPreview = async () => {
+        const attachmentRef = ref(storage, `${attachmentUrl}`);
+        const metadata = await getMetadata(attachmentRef)
+        console.log("METADATA", metadata);
+        if (metadata.contentType === 'image/png' || metadata.contentType === 'image/jpg' || metadata.contentType === 'image/jpeg') {
+            setPreviewFlag(true)
+        }
+        setMetadata(metadata)
+    }
+    useEffect(() => {
+        attachmentUrl && getAttachmentPreview()
+    }, [])
     return (
         <div className='comment-post'>
             <Profile user={{ email, displayName: name, photoURL: userPicture }} />
             <div className='comment-content'>
+                {previewFlag && <img src={attachmentUrl} alt="Attachment" className='attachment-preview' style={{ height: "30vh", width: "100%" }} />}
+                {!previewFlag && <a href={attachmentUrl} target='blank' ><span>{metadata?.name}</span></a>}
                 {/* <div className="ql-editor" style={{ padding: 0 }}>
                     <Markdown skipHtml={true}>{content}</Markdown>
                 </div> */}
