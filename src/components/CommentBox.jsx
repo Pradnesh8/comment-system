@@ -25,7 +25,7 @@ const CommentBox = ({ onAddComment }) => {
         setOpenAttachFile(!openAttachFile)
     }
     const uploadFile = async () => {
-        if (fileUpload == null) return;
+        if (fileUpload == null) return "";
         try {
             const fileRef = ref(storage, `files/${fileUpload.name + crypto.randomUUID()}`);
             const snapshot = await uploadBytes(fileRef, fileUpload)
@@ -50,9 +50,16 @@ const CommentBox = ({ onAddComment }) => {
             return
         }
         const attachmentUrl = await uploadFile();
-        if (attachmentUrl !== '')
+        // when attachment is not added
+        if (attachmentUrl === '' && !fileUpload) {
+            addCommentToDB("");
+        }
+        // when attachment is added
+        else if (attachmentUrl !== '' && fileUpload)
             addCommentToDB(attachmentUrl)
-        else return;
+        else {
+            toast("Error adding a comment, Please try again")
+        };
     }
     const addCommentToDB = async (attachmentUrl) => {
         // data : 
@@ -66,7 +73,12 @@ const CommentBox = ({ onAddComment }) => {
                 name: user.displayName,
                 email: user.email,
                 content: content,
-                reactions: [],
+                // reactions: [],
+                // like_count: 0,
+                // love_count: 0,
+                // clap_count: 0,
+                // laugh_count: 0,
+                // devil_count: 0,
                 replyFlag: false,
                 attachmentUrl: attachmentUrl,
                 photoURL: user.photoURL,
