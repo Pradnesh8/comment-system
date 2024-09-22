@@ -6,9 +6,10 @@ import getCalculatedDateTime from '../utils/timeCalculation';
 import image from './../assets/image.png'
 import { storage } from "../utils/firebase.utils";
 import { ref, getMetadata } from 'firebase/storage';
+import { addReaction, updateReactionCount } from '../utils/firebaseDb.utils';
 // const ReactMarkdown = require("react-markdown/with-html"); //for displaying html
 const CommentPost = ({ post }) => {
-    const { content, email, name, reactions, replyFlag, userPicture, attachmentUrl, uploadDateTime } = post;
+    const { content, email, name, reactions, replyFlag, userPicture, attachmentUrl, uploadDateTime, id } = post;
     const [reactEmoji, setReactEmoji] = useState([]);
     const [previewFlag, setPreviewFlag] = useState(false);
     const [metadata, setMetadata] = useState(null);
@@ -23,6 +24,13 @@ const CommentPost = ({ post }) => {
         const selectedEmoji = event.target.innerHTML
         const emojiObj = {}
         emojiObj[selectedEmoji] = 1
+        emojiObj['email'] = user.email;
+        emojiObj['name'] = user.displayName;
+        emojiObj['photoURL'] = user.photoURL;
+        emojiObj['postid'] = id;
+        emojiObj['emoji'] = selectedEmoji;
+        updateReactionCount(emojiObj)
+        addReaction(emojiObj)
         setReactEmoji([emojiObj, ...reactEmoji])
     }
     const getAttachmentPreview = async () => {
