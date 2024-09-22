@@ -184,15 +184,22 @@ export const addReaction = async (data) => {
     }
 };
 
-export const getReactions = async () => {
-    const querySnapshot = await getDocs(collection(db, "reactions"));
-    const comments = []
-    console.log(querySnapshot)
+export const getReactions = async (data) => {
+    const q = query(collection(db, "reactions"), where("email", "==", data.email), where('postid', '==', data.postid));
+    const querySnapshot = await getDocs(q);
+    const reactions = []
+    // const querySnapshot = await query.get();
+
+    if (querySnapshot.empty) {
+        console.log('No matching documents found.');
+        return "";
+    }
+
     querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${doc.data()}`);
-        comments.push(doc.data());
+        reactions.push(doc.data());
     });
-    return comments;
+    return reactions[0]?.reaction || "";
 };
 
 export const deleteReaction = async (data) => {
