@@ -56,6 +56,7 @@ const CommentPost = ({ post }) => {
         // console.log("TEMPOBJ", tempObj)
         tempObj[getEmojiTextVal] = tempObj[getEmojiTextVal] + 1
         setReactEmoji({ ...tempObj })
+        getSelectedEmoji()
     }
     const getAttachmentPreview = async () => {
         const attachmentRef = ref(storage, `${attachmentUrl}`);
@@ -84,6 +85,8 @@ const CommentPost = ({ post }) => {
                     return '😂';
                 case 'devil':
                     return '😈';
+                default:
+                    return ''
 
             }
         }
@@ -93,7 +96,7 @@ const CommentPost = ({ post }) => {
     useEffect(() => {
         attachmentUrl && getAttachmentPreview();
         getSelectedEmoji();
-    }, [])
+    }, [user])
     return (
         <div className='comment-post'>
             <Profile user={{ email, displayName: name, photoURL: userPicture }} />
