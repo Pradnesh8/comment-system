@@ -185,21 +185,26 @@ export const addReaction = async (data) => {
 };
 
 export const getReactions = async (data) => {
-    const q = query(collection(db, "reactions"), where("email", "==", data.email), where('postid', '==', data.postid));
-    const querySnapshot = await getDocs(q);
-    const reactions = []
-    // const querySnapshot = await query.get();
+    try {
+        const q = query(collection(db, "reactions"), where("email", "==", data.email), where('postid', '==', data.postid));
+        const querySnapshot = await getDocs(q);
+        const reactions = []
+        // const querySnapshot = await query.get();
 
-    if (querySnapshot.empty) {
-        console.log('No matching documents found.');
-        return "";
+        if (querySnapshot.empty) {
+            console.log('No matching documents found.');
+            return "";
+        }
+
+        querySnapshot.forEach((doc) => {
+            console.log(`${doc.id} => ${doc.data()}`);
+            reactions.push(doc.data());
+        });
+        return reactions[0]?.reaction || "";
+    } catch (err) {
+        console.log("Error fetching reaction of user")
+        return ""
     }
-
-    querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
-        reactions.push(doc.data());
-    });
-    return reactions[0]?.reaction || "";
 };
 
 export const deleteReaction = async (data) => {
