@@ -28,6 +28,7 @@ const CommentPost = ({ post }) => {
     const [previewFlag, setPreviewFlag] = useState(false);
     const [metadata, setMetadata] = useState(null);
     const { user, setUser } = useContext(userContext);
+    const [replies, setReplies] = useState([]);
     const [days, hours, minutes, seconds] = getCalculatedDateTime(uploadDateTime, Date.now())
     // create separate db to store reactions
     // post id, user id, reaction emoji, id, timestamp
@@ -165,7 +166,10 @@ const CommentPost = ({ post }) => {
                     {days > 0 && `${days} d`} {hours > 0 && `${hours} h`} {minutes > 0 && `${minutes} m`}  {seconds} s ago
                 </span>
             </div>
-            <div>Replies</div>
+            {
+                replies.length > 0 &&
+                <div>Replies</div>
+            }
         </div>
     )
 }
