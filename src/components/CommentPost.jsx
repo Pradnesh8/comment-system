@@ -8,6 +8,7 @@ import { storage } from "../utils/firebase.utils";
 import { ref, getMetadata } from 'firebase/storage';
 import { addReaction, decrementReactionCount, deleteReaction, getEmojiText, getReactions, updateReactionCount } from '../utils/firebaseDb.utils';
 import toast from 'react-hot-toast';
+import CommentBox from './CommentBox';
 // const ReactMarkdown = require("react-markdown/with-html"); //for displaying html
 const CommentPost = ({ post }) => {
     const { content, email, name, reactions, replyFlag, userPicture, attachmentUrl, uploadDateTime, id,
@@ -29,8 +30,14 @@ const CommentPost = ({ post }) => {
     const [metadata, setMetadata] = useState(null);
     const { user, setUser } = useContext(userContext);
     const [replies, setReplies] = useState([]);
+    const [addReplyFlag, setAddReplyFlag] = useState(false)
     const [days, hours, minutes, seconds] = getCalculatedDateTime(uploadDateTime, Date.now())
-
+    const enableReply = () => {
+        setAddReplyFlag(!addReplyFlag);
+    }
+    const getCommentsFromDb = () => {
+        return []
+    }
     const getSelectedReaction = (reaction) => {
         switch (reaction) {
             case 'like':
@@ -223,7 +230,7 @@ const CommentPost = ({ post }) => {
                     )
                 }
                 |
-                <span className='reply-btn-post'>
+                <span className='reply-btn-post' onClick={enableReply}>
                     Reply
                 </span>
                 |
@@ -232,6 +239,13 @@ const CommentPost = ({ post }) => {
                 </span>
             </div>
             {
+                addReplyFlag &&
+                <div style={{ width: "100%" }}>
+                    <CommentBox onAddComment={getCommentsFromDb} parentId={id} isReply={true} />
+                </div>
+            }
+            {
+                // render replies
                 replies.length > 0 &&
                 <div>Replies</div>
             }
