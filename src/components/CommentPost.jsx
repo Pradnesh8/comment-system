@@ -6,7 +6,7 @@ import getCalculatedDateTime from '../utils/timeCalculation';
 import image from './../assets/image.png'
 import { storage } from "../utils/firebase.utils";
 import { ref, getMetadata } from 'firebase/storage';
-import { addReaction, deleteReaction, getEmojiText, getReactions, updateReactionCount } from '../utils/firebaseDb.utils';
+import { addReaction, decrementReactionCount, deleteReaction, getEmojiText, getReactions, updateReactionCount } from '../utils/firebaseDb.utils';
 import toast from 'react-hot-toast';
 // const ReactMarkdown = require("react-markdown/with-html"); //for displaying html
 const CommentPost = ({ post }) => {
@@ -30,11 +30,30 @@ const CommentPost = ({ post }) => {
     const { user, setUser } = useContext(userContext);
     const [replies, setReplies] = useState([]);
     const [days, hours, minutes, seconds] = getCalculatedDateTime(uploadDateTime, Date.now())
+
+    const getSelectedReaction = (reaction) => {
+        switch (reaction) {
+            case 'like':
+                return '👍';
+            case 'love':
+                return '😍';
+            case 'clap':
+                return '👏';
+            case 'laugh':
+                return '😂';
+            case 'devil':
+                return '😈';
+            default:
+                return ''
+
+        }
+    }
+
     // create separate db to store reactions
     // post id, user id, reaction emoji, id, timestamp
     // crate index on postid, userid for efficient lookup
     // also store reaction count in commnents collection like_count, devil_count, clap_count, etc
-    const selectEmoji = (event) => {
+    const selectEmoji = async (event) => {
         if (!(user?.email?.length > 0)) {
             // alert('Please sign in to post a comment')
             toast('Please sign in to react to comment')
@@ -49,13 +68,73 @@ const CommentPost = ({ post }) => {
         emojiObj['photoURL'] = user.photoURL;
         emojiObj['postid'] = id;
         emojiObj['emoji'] = selectedEmoji;
-        updateReactionCount(emojiObj)
-        addReaction(emojiObj)
+        console.log("Selected", selectedEmoji, selectedReaction)
         const getEmojiTextVal = getEmojiText(selectedEmoji) + "_count";
         const tempObj = { ...reactEmoji }
-        // console.log("TEMPOBJ", tempObj)
-        tempObj[getEmojiTextVal] = tempObj[getEmojiTextVal] + 1
-        setReactEmoji({ ...tempObj })
+        if ((selectedEmoji === selectedReaction) && selectedReaction !== '') {
+            console.log("IN")
+            // call delete reaction
+            const isDeleted = await deleteReaction(emojiObj)
+            if (isDeleted) {
+                // setSelectedReaction('');
+                const decrement = await decrementReactionCount(emojiObj);
+                if (!decrement) {
+                    toast("Something went wrong")
+                    return
+                }
+                tempObj[getEmojiTextVal] = tempObj[getEmojiTextVal] - 1
+                setReactEmoji({ ...tempObj })
+            }
+            else toast("Something went wrong")
+        }
+        else if ((selectedEmoji !== selectedReaction) && selectedReaction !== '') {
+            console.log("IN2")
+            // call delete reaction
+            const isDeleted = await deleteReaction(emojiObj)
+            if (isDeleted) {
+                // setSelectedReaction('');
+                emojiObj['emoji'] = selectedReaction; // => to decrement previously selected emoji count
+                const decrement = await decrementReactionCount(emojiObj);
+                if (!decrement) {
+                    toast("Something went wrong")
+                    return
+                }
+                let getEmojiTextOldVal = getEmojiText(selectedReaction) + "_count";
+                tempObj[getEmojiTextOldVal] = tempObj[getEmojiTextOldVal] - 1
+                emojiObj['emoji'] = selectedEmoji; // => to increment newly selected emoji count
+                const updated = await updateReactionCount(emojiObj)
+                console.log("VAL2", updated)
+                if (!updated) {
+                    toast("Something went wrong")
+                    return
+                }
+                const added = await addReaction(emojiObj)
+                if (added === "") {
+                    toast("Something went wrong")
+                    return
+                }
+                // console.log("TEMPOBJ", tempObj)
+                tempObj[getEmojiTextVal] = tempObj[getEmojiTextVal] + 1
+                setReactEmoji({ ...tempObj })
+            }
+            else toast("Something went wrong")
+        }
+        else {
+            const updated = await updateReactionCount(emojiObj)
+            console.log("VAL", updated)
+            if (!updated) {
+                toast("Something went wrong")
+                return
+            }
+            const added = await addReaction(emojiObj)
+            if (added === "") {
+                toast("Something went wrong")
+                return
+            }
+            // console.log("TEMPOBJ", tempObj)
+            tempObj[getEmojiTextVal] = tempObj[getEmojiTextVal] + 1
+            setReactEmoji({ ...tempObj })
+        }
         getSelectedEmoji()
     }
     const getAttachmentPreview = async () => {
@@ -73,35 +152,8 @@ const CommentPost = ({ post }) => {
         obj['email'] = user.email;
         const reaction = await getReactions(obj)
         console.log("Selected reaction by user", reaction)
-        const getSelectedReaction = (reaction) => {
-            switch (reaction) {
-                case 'like':
-                    return '👍';
-                case 'love':
-                    return '😍';
-                case 'clap':
-                    return '👏';
-                case 'laugh':
-                    return '😂';
-                case 'devil':
-                    return '😈';
-                default:
-                    return ''
-
-            }
-        }
         const selected = getSelectedReaction(reaction)
-        console.log("Selected", selected)
-        if (selected === selectedReaction && selected !== '') {
-            console.log("IN")
-            // call delete reaction
-            const isDeleted = await deleteReaction(obj)
-            if (isDeleted) setSelectedReaction('');
-            else toast("Something went wrong")
-        } else {
-            console.log("NOT IN")
-            setSelectedReaction(selected)
-        }
+        setSelectedReaction(selected)
     }
     useEffect(() => {
         attachmentUrl && getAttachmentPreview();

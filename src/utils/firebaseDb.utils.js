@@ -128,23 +128,52 @@ export const updateReactionCount = async (data) => {
 
     if (querySnapshot.empty) {
         console.log('No matching documents found.');
-        return;
+        return false;
     }
     const getEmojiTextVal = getEmojiText(data.emoji)
     const inputObj = {}
     inputObj[`${getEmojiTextVal}_count`] = increment(1);
     // Loop through matching documents and increment the value
-    querySnapshot.forEach(async (doc) => {
-        try {
+    // querySnapshot.forEach(async (doc) => {
+    try {
+        for (const doc of querySnapshot.docs) {
             await updateDoc(doc.ref, inputObj);
             console.log(`Document with ID: ${doc.id} updated, reaction count incremented.`);
-            return true
-        } catch (error) {
-            console.error('Error updating document: ', error);
-            return false
         }
-    });
+        return true;
+    } catch (error) {
+        console.error('Error updating document: ', error);
+        return false
+    }
+    // });
 };
+
+export const decrementReactionCount = async (data) => {
+    const commentsRef = collection(db, 'comments');
+    const q = query(commentsRef, where('id', '==', data.postid));  // Query based on email
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+        console.log('No matching documents found.');
+        return;
+    }
+    const getEmojiTextVal = getEmojiText(data.emoji)
+    const inputObj = {}
+    inputObj[`${getEmojiTextVal}_count`] = increment(-1);
+    // Loop through matching documents and increment the value
+    // querySnapshot.forEach(async (doc) => {
+    try {
+        for (const doc of querySnapshot.docs) {
+            await updateDoc(doc.ref, inputObj);
+            console.log(`Document with ID: ${doc.id} updated, reaction count decremented.`);
+        }
+        return true
+    } catch (error) {
+        console.error('Error updating document: ', error);
+        return false
+    }
+    // });
+}
 
 
 
