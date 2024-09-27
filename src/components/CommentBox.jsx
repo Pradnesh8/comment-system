@@ -11,7 +11,7 @@ import {
 } from "firebase/storage";
 import { storage } from "../utils/firebase.utils";
 
-const CommentBox = ({ onAddComment }) => {
+const CommentBox = ({ onAddComment, isReply, parentId }) => {
     const [content, setContent] = useState("");
     const { user } = useContext(userContext);
     const [openAttachFile, setOpenAttachFile] = useState(false)
@@ -79,7 +79,8 @@ const CommentBox = ({ onAddComment }) => {
                 // clap_count: 0,
                 // laugh_count: 0,
                 // devil_count: 0,
-                replyFlag: false,
+                replyFlag: isReply,
+                parentPostId: parentId,
                 attachmentUrl: attachmentUrl,
                 photoURL: user.photoURL,
                 uploadDateTime: Date.now()
