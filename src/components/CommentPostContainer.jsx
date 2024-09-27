@@ -58,13 +58,13 @@ const CommentPostContainer = () => {
         <div className='container'>
             <Header commentsLength={commentPosts.length} />
             {/* rerender comments on add */}
-            <CommentBox onAddComment={getCommentsFromDb} />
+            <CommentBox onAddComment={getCommentsFromDb} parentId={''} isReply={false} />
             <>
                 {commentPosts.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 1rem' }}>No comments posted</div>}
                 {/* Paginated posts */}
                 {
                     currentItems?.map((post, id) => (
-                        <CommentPost key={post.uploadDateTime} post={post} />
+                        !post?.replyFlag && <CommentPost key={post.uploadDateTime} post={post} />
                     ))
                 }
                 {/* {JSON.stringify(commentPosts)} */}

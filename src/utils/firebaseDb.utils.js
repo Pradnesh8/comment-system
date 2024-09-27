@@ -91,6 +91,7 @@ export const addComment = async (data) => {
             clap_count: 0,
             laugh_count: 0,
             devil_count: 0,
+            parentPostId: data.parentPostId,
             replyFlag: data.replyFlag,
             userPicture: data.photoURL,
             uploadDateTime: data.uploadDateTime
