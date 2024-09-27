@@ -1,5 +1,5 @@
 
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where, increment } from "firebase/firestore";
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where, increment, writeBatch } from "firebase/firestore";
 import { db } from './firebase.utils'
 export const getEmojiText = (emoji) => {
     switch (emoji) {
@@ -208,24 +208,33 @@ export const getReactions = async (data) => {
 };
 
 export const deleteReaction = async (data) => {
-    const reactionRef = db.collection('reactions');
-    const query = reactionRef
-        .where('email', '==', data.email)
-        .where('postid', '==', data.postid)
+    // const reactionRef = db.collection('reactions');
+    const q = query(collection(db, "reactions"), where("email", "==", data.email), where('postid', '==', data.postid));
+    // const query = reactionRef
+    //     .where('email', '==', data.email)
+    //     .where('postid', '==', data.postid)
 
-    const querySnapshot = await query.get();
+    const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
         console.log('No matching documents found.');
-        return;
+        return false;
     }
 
     try {
-        await query.delete();  // Use deleteMany for batch deletion
+        // Firestore doesn't have a direct deleteMany or deleteAll. We have to delete documents individually.
+        const batch = writeBatch(db);  // Use batch to perform atomic deletes.
+
+        querySnapshot.forEach((doc) => {
+            batch.delete(doc.ref);  // Add each document to the batch for deletion.
+        });
+
+        await batch.commit();  // Commit the batch deletion.
+
         console.log('Deleted matching documents.');
-        return true
+        return true;
     } catch (error) {
         console.error('Error deleting documents:', error);
-        return false
+        return false;
     }
 }

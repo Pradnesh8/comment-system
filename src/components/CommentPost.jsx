@@ -6,7 +6,7 @@ import getCalculatedDateTime from '../utils/timeCalculation';
 import image from './../assets/image.png'
 import { storage } from "../utils/firebase.utils";
 import { ref, getMetadata } from 'firebase/storage';
-import { addReaction, getEmojiText, getReactions, updateReactionCount } from '../utils/firebaseDb.utils';
+import { addReaction, deleteReaction, getEmojiText, getReactions, updateReactionCount } from '../utils/firebaseDb.utils';
 import toast from 'react-hot-toast';
 // const ReactMarkdown = require("react-markdown/with-html"); //for displaying html
 const CommentPost = ({ post }) => {
@@ -90,8 +90,18 @@ const CommentPost = ({ post }) => {
 
             }
         }
-        setSelectedReaction(getSelectedReaction(reaction))
-
+        const selected = getSelectedReaction(reaction)
+        console.log("Selected", selected)
+        if (selected === selectedReaction && selected !== '') {
+            console.log("IN")
+            // call delete reaction
+            const isDeleted = await deleteReaction(obj)
+            if (isDeleted) setSelectedReaction('');
+            else toast("Something went wrong")
+        } else {
+            console.log("NOT IN")
+            setSelectedReaction(selected)
+        }
     }
     useEffect(() => {
         attachmentUrl && getAttachmentPreview();
