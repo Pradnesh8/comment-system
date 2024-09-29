@@ -6,12 +6,12 @@ import getCalculatedDateTime from '../utils/timeCalculation';
 import image from './../assets/image.png'
 import { storage } from "../utils/firebase.utils";
 import { ref, getMetadata } from 'firebase/storage';
-import { addReaction, decrementReactionCount, deleteReaction, getEmojiText, getReactions, updateReactionCount } from '../utils/firebaseDb.utils';
+import { addReaction, decrementReactionCount, deleteReaction, getEmojiText, getReactions, getReplyCommentsByParentId, updateReactionCount } from '../utils/firebaseDb.utils';
 import toast from 'react-hot-toast';
 import CommentBox from './CommentBox';
 // const ReactMarkdown = require("react-markdown/with-html"); //for displaying html
 const CommentPost = ({ post }) => {
-    const { content, email, name, reactions, replyFlag, userPicture, attachmentUrl, uploadDateTime, id,
+    const { content, email, name, reactions, replyFlag, userPicture, attachmentUrl, uploadDateTime, id, parentPostId,
         // emoji count
         like_count,
         love_count,
@@ -37,6 +37,14 @@ const CommentPost = ({ post }) => {
     }
     const getCommentsFromDb = () => {
         return []
+    }
+    const getPostReplies = async () => {
+        console.log("called search reply")
+        const obj = {}
+        obj['parentPostId'] = id
+        const foundReplies = await getReplyCommentsByParentId(obj);
+        console.log("FOUND replies", foundReplies)
+        setReplies(foundReplies)
     }
     const getSelectedReaction = (reaction) => {
         switch (reaction) {
@@ -164,6 +172,9 @@ const CommentPost = ({ post }) => {
     }
     useEffect(() => {
         attachmentUrl && getAttachmentPreview();
+        getPostReplies();
+    }, [])
+    useEffect(() => {
         getSelectedEmoji();
     }, [user])
     return (
@@ -246,8 +257,14 @@ const CommentPost = ({ post }) => {
             }
             {
                 // render replies
-                replies.length > 0 &&
-                <div>Replies</div>
+                // replies.length > 0 &&
+                // <div>Replies</div>
+                replies?.map((post, id) => (
+                    <div style={{ width: "100%" }}>
+                        <CommentPost key={post.uploadDateTime} post={post} />
+                    </div>
+                ))
+
             }
         </div>
     )
