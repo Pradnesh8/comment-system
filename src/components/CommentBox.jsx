@@ -80,7 +80,7 @@ const CommentBox = ({ onAddComment, isReply, parentId }) => {
                 // laugh_count: 0,
                 // devil_count: 0,
                 replyFlag: isReply,
-                parentPostId: parentId,
+                parentPostId: parentId || '',
                 attachmentUrl: attachmentUrl,
                 photoURL: user.photoURL,
                 uploadDateTime: Date.now()

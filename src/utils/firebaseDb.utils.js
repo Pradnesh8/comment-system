@@ -115,6 +115,27 @@ export const getComments = async () => {
     return comments;
 };
 
+export const getReplyCommentsByParentId = async (data) => {
+    console.log('1')
+    const commentsRef = collection(db, 'comments');
+    console.log('2', data)
+
+    const q = query(commentsRef, where('parentPostId', '==', data.parentPostId));  // Query based on email
+    console.log('3')
+    const querySnapshot = await getDocs(q);
+    console.log('4')
+    const comments = []
+    if (querySnapshot.empty) {
+        console.log('No matching documents found.');
+        return comments;
+    }
+    querySnapshot.forEach((doc) => {
+        console.log(`${doc.id} => ${doc.data()}`);
+        comments.push(doc.data());
+    });
+    return comments;
+};
+
 export const updateComment = async (id, data) => {
     const userRef = doc(db, "comments", id);
     await updateDoc(userRef, {
