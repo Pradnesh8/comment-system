@@ -11,7 +11,7 @@ const CommentPostContainer = () => {
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
-    const itemsPerPage = 5;
+    const itemsPerPage = 8;
 
 
     // Invoke when user click to request another page.
