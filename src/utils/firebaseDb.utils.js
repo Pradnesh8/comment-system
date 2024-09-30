@@ -105,8 +105,11 @@ export const addComment = async (data) => {
 };
 
 export const getComments = async () => {
-    const querySnapshot = await getDocs(collection(db, "comments"));
+    // const querySnapshot = await getDocs(collection(db, "comments"));
+    const commentsRef = collection(db, 'comments');
+    const q = query(commentsRef, where('replyFlag', '==', false));  // Query based on email
     const comments = []
+    const querySnapshot = await getDocs(q);
     console.log(querySnapshot)
     querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${doc.data()}`);
