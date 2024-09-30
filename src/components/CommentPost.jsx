@@ -35,9 +35,7 @@ const CommentPost = ({ post }) => {
     const enableReply = () => {
         setAddReplyFlag(!addReplyFlag);
     }
-    const getCommentsFromDb = () => {
-        return []
-    }
+
     const getPostReplies = async () => {
         console.log("called search reply")
         const obj = {}
@@ -45,6 +43,7 @@ const CommentPost = ({ post }) => {
         const foundReplies = await getReplyCommentsByParentId(obj);
         console.log("FOUND replies", foundReplies)
         setReplies(foundReplies)
+        if (addReplyFlag) setAddReplyFlag(!addReplyFlag)
     }
     const getSelectedReaction = (reaction) => {
         switch (reaction) {
@@ -252,7 +251,7 @@ const CommentPost = ({ post }) => {
             {
                 addReplyFlag &&
                 <div style={{ width: "100%" }}>
-                    <CommentBox onAddComment={getCommentsFromDb} parentId={id} isReply={true} />
+                    <CommentBox onAddComment={getPostReplies} parentId={id} isReply={true} />
                 </div>
             }
             {
