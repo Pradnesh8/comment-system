@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -28,5 +28,22 @@ provider.setCustomParameters({
     prompt: "select_account "
 });
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGooglePopup = () => {
+    return setPersistence(auth, browserLocalPersistence) // Set the persistence mode to local
+        .then(() => signInWithPopup(auth, provider))
+        .catch((error) => {
+            console.error("Error during sign-in:", error);
+        });
+};
+
+export const logoutUser = async () => {
+    try {
+        await signOut(auth)
+        console.log("User signed out successfully.");
+        return true
+    } catch (err) {
+        console.error("Error signing out:", error);
+        return false
+    }
+};
 export const storage = getStorage(app);
