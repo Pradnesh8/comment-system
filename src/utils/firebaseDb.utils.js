@@ -38,6 +38,32 @@ export const getUserData = async () => {
     });
 };
 
+export const getUserNamesBySearch = async (searchTerm) => {
+    try {
+        // Reference to the 'users' collection
+        const usersRef = collection(db, "users");
+
+        // Query to search users by display name
+        const q = query(usersRef, where("name", ">=", searchTerm), where("name", "<=", searchTerm + '\uf8ff'));
+
+        // Fetching the query snapshot
+        const querySnapshot = await getDocs(q);
+
+        const users = [];
+        querySnapshot.forEach((doc) => {
+            users.push({
+                id: doc.id,
+                ...doc.data(),
+            });
+        });
+
+        return users; // Returning the list of matching users
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return [];
+    }
+};
+
 export const getUserDataByEmail = async (email) => {
     try {
         // const userRef = await getDocs(collection(db, "users"));
