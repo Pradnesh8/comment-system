@@ -10,7 +10,7 @@ function getCalculatedDateTime(pastDate, currentDate) {
     hours = hours - (days * 24);
     minutes = minutes - (days * 24 * 60) - (hours * 60);
     seconds = seconds - (days * 24 * 60 * 60) - (hours * 60 * 60) - (minutes * 60);
-    console.log(days, hours, minutes, seconds)
+
     return [days, hours, minutes, seconds];
 }
 
