@@ -23,7 +23,7 @@ export const addUserData = async (data) => {
             email: data.email,
             userPicture: data.photoURL
         });
-        console.log("Document written with ID: ", docRef.id);
+        // console.log("Document written with ID: ", docRef.id);
         return true
     } catch (e) {
         console.error("Error adding document: ", e);
@@ -70,7 +70,7 @@ export const getUserDataByEmail = async (email) => {
         // const q = query(userRef, where("email", "==", email));
         const q = query(collection(db, "users"), where("email", "==", email));
         const querySnapshot = await getDocs(q);
-        console.log("query res to find user by email", querySnapshot);
+        // console.log("query res to find user by email", querySnapshot);
         return querySnapshot.docs.length > 0;
     } catch (err) {
         console.log("Error finding user", err)
@@ -98,10 +98,10 @@ export const deleteData = async (id) => {
 export const addComment = async (data) => {
     try {
         const findUserByMail = await getUserDataByEmail(data.email);
-        console.log("found mail", findUserByMail);
+        // console.log("found mail", findUserByMail);
         if (!findUserByMail) {
             const res = await addUserData(data)
-            console.log("added user", res)
+            // console.log("added user", res)
             if (!res) return ""
         }
         const docRef = await addDoc(collection(db, "comments"), {
@@ -122,7 +122,7 @@ export const addComment = async (data) => {
             userPicture: data.photoURL,
             uploadDateTime: data.uploadDateTime
         });
-        console.log("Document written with ID: ", docRef.id);
+        // console.log("Document written with ID: ", docRef.id);
         return docRef;
     } catch (e) {
         console.error("Error adding document: ", e);
@@ -189,7 +189,7 @@ export const updateReactionCount = async (data) => {
     try {
         for (const doc of querySnapshot.docs) {
             await updateDoc(doc.ref, inputObj);
-            console.log(`Document with ID: ${doc.id} updated, reaction count incremented.`);
+            // console.log(`Document with ID: ${doc.id} updated, reaction count incremented.`);
         }
         return true;
     } catch (error) {
@@ -216,7 +216,7 @@ export const decrementReactionCount = async (data) => {
     try {
         for (const doc of querySnapshot.docs) {
             await updateDoc(doc.ref, inputObj);
-            console.log(`Document with ID: ${doc.id} updated, reaction count decremented.`);
+            // console.log(`Document with ID: ${doc.id} updated, reaction count decremented.`);
         }
         return true
     } catch (error) {
@@ -238,10 +238,10 @@ export const deleteComment = async (id) => {
 export const addReaction = async (data) => {
     try {
         const findUserByMail = await getUserDataByEmail(data.email);
-        console.log("found mail", findUserByMail);
+        // console.log("found mail", findUserByMail);
         if (!findUserByMail) {
             const res = await addUserData(data)
-            console.log("added user", res)
+            // console.log("added user", res)
             if (!res) return ""
         }
         // check if reaction 
@@ -254,9 +254,9 @@ export const addReaction = async (data) => {
             postid: data?.postid
             // uploadDateTime: data.uploadDateTime
         }
-        console.log("INPUTOBJ", inputObj)
+        // console.log("INPUTOBJ", inputObj)
         const docRef = await addDoc(collection(db, "reactions"), inputObj);
-        console.log("Document written with ID: ", docRef.id);
+        // console.log("Document written with ID: ", docRef.id);
         return docRef;
     } catch (e) {
         console.error("Error adding document: ", e);
@@ -311,7 +311,7 @@ export const deleteReaction = async (data) => {
 
         await batch.commit();  // Commit the batch deletion.
 
-        console.log('Deleted matching documents.');
+        // console.log('Deleted matching documents.');
         return true;
     } catch (error) {
         console.error('Error deleting documents:', error);
