@@ -12,11 +12,6 @@ function App() {
   const [user, setUser] = useState({})
   const [commentMode, setCommentMode] = useState("latest")
 
-
-  useEffect(() => {
-    // getData();
-    console.log("Fired query to firestore")
-  }, [])
   /***
    * 
 ● Google Authentication: Ensure users can sign in with Google to post comments.
