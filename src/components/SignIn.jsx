@@ -10,7 +10,7 @@ const SignIn = () => {
     // console.log("user value", userValue)
     const logGoogleUser = async () => {
         const response = await signInWithGooglePopup();
-        console.log(response);
+        // console.log(response);
         setUser(response.user)
     }
     const logout = async () => {

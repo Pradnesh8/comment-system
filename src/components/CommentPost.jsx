@@ -37,11 +37,11 @@ const CommentPost = ({ post }) => {
     }
 
     const getPostReplies = async () => {
-        console.log("called search reply")
+        // console.log("called search reply")
         const obj = {}
         obj['parentPostId'] = id
         const foundReplies = await getReplyCommentsByParentId(obj);
-        console.log("FOUND replies", foundReplies)
+        // console.log("FOUND replies", foundReplies)
         setReplies(foundReplies)
         if (addReplyFlag) setAddReplyFlag(!addReplyFlag)
     }
@@ -82,11 +82,10 @@ const CommentPost = ({ post }) => {
         emojiObj['photoURL'] = user.photoURL;
         emojiObj['postid'] = id;
         emojiObj['emoji'] = selectedEmoji;
-        console.log("Selected", selectedEmoji, selectedReaction)
+        // console.log("Selected", selectedEmoji, selectedReaction)
         const getEmojiTextVal = getEmojiText(selectedEmoji) + "_count";
         const tempObj = { ...reactEmoji }
         if ((selectedEmoji === selectedReaction) && selectedReaction !== '') {
-            console.log("IN")
             // call delete reaction
             const isDeleted = await deleteReaction(emojiObj)
             if (isDeleted) {
@@ -102,7 +101,6 @@ const CommentPost = ({ post }) => {
             else toast("Something went wrong")
         }
         else if ((selectedEmoji !== selectedReaction) && selectedReaction !== '') {
-            console.log("IN2")
             // call delete reaction
             const isDeleted = await deleteReaction(emojiObj)
             if (isDeleted) {
@@ -117,7 +115,6 @@ const CommentPost = ({ post }) => {
                 tempObj[getEmojiTextOldVal] = tempObj[getEmojiTextOldVal] - 1
                 emojiObj['emoji'] = selectedEmoji; // => to increment newly selected emoji count
                 const updated = await updateReactionCount(emojiObj)
-                console.log("VAL2", updated)
                 if (!updated) {
                     toast("Something went wrong")
                     return
@@ -135,7 +132,6 @@ const CommentPost = ({ post }) => {
         }
         else {
             const updated = await updateReactionCount(emojiObj)
-            console.log("VAL", updated)
             if (!updated) {
                 toast("Something went wrong")
                 return
@@ -154,7 +150,6 @@ const CommentPost = ({ post }) => {
     const getAttachmentPreview = async () => {
         const attachmentRef = ref(storage, `${attachmentUrl}`);
         const metadata = await getMetadata(attachmentRef)
-        console.log("METADATA", metadata);
         if (metadata.contentType === 'image/png' || metadata.contentType === 'image/jpg' || metadata.contentType === 'image/jpeg') {
             setPreviewFlag(true)
         }
@@ -165,7 +160,7 @@ const CommentPost = ({ post }) => {
         obj['postid'] = id
         obj['email'] = user.email;
         const reaction = await getReactions(obj)
-        console.log("Selected reaction by user", reaction)
+
         const selected = getSelectedReaction(reaction)
         setSelectedReaction(selected)
     }
@@ -182,12 +177,8 @@ const CommentPost = ({ post }) => {
             <div className='comment-content'>
                 {previewFlag && <img src={attachmentUrl} alt="Attachment" className='attachment-preview' style={{ height: "30vh", width: "100%" }} />}
                 {!previewFlag && <a href={attachmentUrl} target='blank' ><span>{metadata?.name}</span></a>}
-                {/* <div className="ql-editor" style={{ padding: 0 }}>
-                    <Markdown skipHtml={true}>{content}</Markdown>
-                </div> */}
+
                 {parse(content)}
-                {/* TODO: implement show more content if length is more */}
-                {/* <span className='show-more-btn'><br />show more</span> */}
             </div>
             {/* Footer - emoji icon | reply | time since post */}
             <div className='post-footer'>
@@ -210,11 +201,6 @@ const CommentPost = ({ post }) => {
                     </div>
                 </span>
                 {
-                    // reactEmoji?.map((emoji, index) => (
-                    //     <span className='emoji-btn'>
-                    //         {Object.keys(emoji)[0]}{Object.values(emoji)[0]}
-                    //     </span>
-                    // ))
                     reactEmoji.like_count > 0 && (
                         <span className='emoji-btn'>👍{reactEmoji.like_count}</span>
                     )
@@ -256,8 +242,6 @@ const CommentPost = ({ post }) => {
             }
             {
                 // render replies
-                // replies.length > 0 &&
-                // <div>Replies</div>
                 replies?.map((post, id) => (
                     <div style={{ width: "100%" }}>
                         <CommentPost key={post.uploadDateTime} post={post} />

@@ -31,7 +31,7 @@ const CommentPostContainer = () => {
         // (This could be items from props; or items loaded in a local state
         // from an API endpoint with useEffect and useState)
         const endOffset = itemOffset + itemsPerPage;
-        console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+        // console.log(`Loading items from ${itemOffset} to ${endOffset}`);
         const getCurrentItems = items.slice(itemOffset, endOffset);
         setCurrentItems(getCurrentItems);
         const getPageCount = Math.ceil(items.length / itemsPerPage);

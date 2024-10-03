@@ -130,7 +130,7 @@ const CommentBox = ({ onAddComment, isReply, parentId }) => {
                 uploadDateTime: Date.now()
             }
             const res = await addComment(commentInput);
-            console.log("res from add comment", res);
+            // console.log("res from add comment", res);
             if (!res) {
                 // alert("Error adding comment, Please try again!")
                 toast('Error adding comment, Please try again!')
@@ -197,18 +197,6 @@ const CommentBox = ({ onAddComment, isReply, parentId }) => {
                 </button>
                 <button className='commentSendBtn' onClick={finalContent}>Send</button>
             </div>
-            {/* <TextEditor finalContent={finalContent} /> */}
-            {/* <textarea name="comment-textfield" rows={4} className="comment-textfield" onChange={(e) => setContent(e.target.value)}></textarea>
-            <hr />
-            <div className='action-bar'>
-                <div className='text-decoration-bar'>
-                    <span><b>B</b></span>
-                    <span>I</span>
-                    <span>U</span>
-                    <span><i className="fa-solid fa-paperclip"></i></span>
-                </div>
-                <button className='send-comment-btn' onClick={addCommentToDB}>Send</button>
-            </div> */}
         </div>
     )
 }
