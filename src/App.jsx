@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import userContext from './utils/userContext'
 import appContext from './utils/appContext'
-import SignIn from './components/Signin'
+import Signin from './components/Signin'
 import CommentPostContainer from './components/CommentPostContainer'
 
 import { Toaster } from 'react-hot-toast';
@@ -45,7 +45,7 @@ Components:
     // Dashboard component
     <userContext.Provider value={{ user, setUser }}>
       <>
-        <SignIn />
+        <Signin />
         <appContext.Provider value={{ commentMode, setCommentMode }}>
           <CommentPostContainer />
         </appContext.Provider>

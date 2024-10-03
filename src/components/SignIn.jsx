@@ -4,7 +4,7 @@ import userContext from "../utils/userContext";
 import Profile from "./Profile";
 import toast from 'react-hot-toast';
 import { onAuthStateChanged } from "firebase/auth";
-const SignIn = () => {
+const Signin = () => {
     const { user, setUser } = useContext(userContext);
 
     // console.log("user value", userValue)
@@ -51,4 +51,4 @@ const SignIn = () => {
 
     )
 }
-export default SignIn;
+export default Signin;
