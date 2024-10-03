@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import CommentPost from './CommentPost';
 import Header from './Header';
 import CommentBox from './CommentBox';
 import { getComments } from '../utils/firebaseDb.utils';
 import ReactPaginate from 'react-paginate';
+import appContext from '../utils/appContext';
 const CommentPostContainer = () => {
     const [commentPosts, setCommentPosts] = useState([]);
     // Here we use item offsets; we could also use page offsets
@@ -12,6 +13,7 @@ const CommentPostContainer = () => {
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const itemsPerPage = 8;
+    const { commentMode, setCommentMode } = useContext(appContext);
 
 
     // Invoke when user click to request another page.
@@ -35,10 +37,21 @@ const CommentPostContainer = () => {
         const getPageCount = Math.ceil(items.length / itemsPerPage);
         setPageCount(getPageCount);
     }
+    const getPopularity = (post) => {
+        return parseInt(post?.like_count) +
+            parseInt(post?.love_count) +
+            parseInt(post?.clap_count) +
+            parseInt(post?.laugh_count) +
+            parseInt(post?.devil_count)
+    }
     const getCommentsFromDb = async () => {
         try {
             const res = await getComments();
-            res.sort((a, b) => b.uploadDateTime - a.uploadDateTime)
+            if (commentMode === 'latest') {
+                res.sort((a, b) => b.uploadDateTime - a.uploadDateTime)
+            } else {
+                res.sort((a, b) => getPopularity(b) - getPopularity(a))
+            }
             setCommentPosts(res)
             console.log("Fetched comments successfully")
             // console.log("Comments", commentPosts);
@@ -49,7 +62,7 @@ const CommentPostContainer = () => {
     }
     useEffect(() => {
         getCommentsFromDb();
-    }, []);
+    }, [commentMode]);
     // to update page after on click of page number
     useEffect(() => {
         setPagination(commentPosts);
