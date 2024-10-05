@@ -19,7 +19,19 @@ button {
 .profile {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 0.5rem 1rem;
+    background: black;
+    color: white;
+}
+.main-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+.pic {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .profile-name-dp {
     display: flex;
@@ -34,8 +46,11 @@ button {
 }
 .sign-in-btn {
     display: flex;
-    justify-content: end;
-    margin-right: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: black;
+    color: white;
 }
 
 /* header */

@@ -39,6 +39,7 @@ const Signin = () => {
         user?.displayName ? (
             <div className="profile">
                 <Profile user={user} />
+                <div className="main-title">Comment System</div>
                 <button className="logout-btn" onClick={logout}>
                     logout
                 </button>
@@ -46,6 +47,7 @@ const Signin = () => {
             </div>
         ) :
             <div className="sign-in-btn">
+                <div className="main-title">Comment System</div>
                 <button onClick={logGoogleUser}>Sign In With Google</button>
             </div>
 
