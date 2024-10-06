@@ -11,6 +11,9 @@ import {
 } from "firebase/storage";
 import { storage } from "../utils/firebase.utils";
 const CommentBox = ({ onAddComment, isReply, parentId }) => {
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    // Reference to the file input element
+    const fileInputRef = useRef(null);
     const [content, setContent] = useState("");
     const { user } = useContext(userContext);
     const [openAttachFile, setOpenAttachFile] = useState(false)
@@ -68,6 +71,22 @@ const CommentBox = ({ onAddComment, isReply, parentId }) => {
         if (openAttachFile) setFileUpload(null)
         setOpenAttachFile(!openAttachFile)
     }
+    // Handle file selection
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        // console.log("selectedfile", selectedFile)
+        // Check if a file was selected
+        if (selectedFile) {
+            // Check file size
+            if (selectedFile.size > MAX_FILE_SIZE) {
+                toast("File size exceeds the 5MB limit. Please select a smaller file.")
+                setFileUpload(null)// Clear file if size is too large
+                fileInputRef.current.value = "";
+            } else {
+                setFileUpload(selectedFile)// Set the selected file
+            }
+        }
+    };
     const uploadFile = async () => {
         if (fileUpload == null) return "";
         try {
@@ -188,7 +207,7 @@ const CommentBox = ({ onAddComment, isReply, parentId }) => {
                     ))}
                 </ul>
             )}
-            {openAttachFile && <input type="file" name="upload-file" id="upload-file" onChange={(e) => setFileUpload(e.target.files[0])} />}
+            {openAttachFile && <input ref={fileInputRef} type="file" name="upload-file" id="upload-file" onChange={handleFileChange} />}
             <div className='commentSendBtn-container'>
                 <button className='attachFileBtn' onClick={toggleAttachFile}>
                     {
