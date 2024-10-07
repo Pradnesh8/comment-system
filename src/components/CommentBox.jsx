@@ -205,6 +205,15 @@ const CommentBox = ({ onAddComment, isReply, parentId }) => {
 
                         </li>
                     ))}
+                    {
+                        filteredSuggestions.length === 0 &&
+                        <li style={{
+                            padding: "5px 10px",
+                            cursor: "pointer",
+                        }}>
+                            User name is not present
+                        </li>
+                    }
                 </ul>
             )}
             {openAttachFile && <input ref={fileInputRef} type="file" name="upload-file" id="upload-file" onChange={handleFileChange} />}
